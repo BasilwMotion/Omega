@@ -2,25 +2,30 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/*.py",
+      "src": "api/execute.py",
       "use": "@vercel/python"
     },
     {
       "src": "package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "dist"
+        "distDir": "dist",
+        "buildCommand": "npm run build"
       }
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api/$1.py"
+      "dest": "/api/execute.py"
     },
     {
       "src": "/(.*)",
       "dest": "/dist/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/dist/index.html"
     }
   ],
   "env": {

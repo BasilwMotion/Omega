@@ -1,106 +1,196 @@
-/* OMEGA Financial Tracker — Global Styles */
-
-*, *::before, *::after {
-  box-sizing: border-box;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-:root {
-  --bg:       #0d0f14;
-  --card:     #151820;
-  --border:   #1f2433;
-  --accent:   #6366f1;
-  --green:    #22c55e;
-  --red:      #ef4444;
-  --yellow:   #f59e0b;
-  --muted:    #94a3b8;
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #e0e0e0;
+    min-height: 100vh;
+    padding: 20px;
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  background-color: var(--bg);
-  color: #e2e8f0;
-  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
-  font-size: 14px;
-  min-height: 100vh;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) var(--bg);
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-/* ── Canvas charts ─────────────────────────────────────────────────────── */
-canvas {
-  display: block;
-  width: 100% !important;
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 20px 0;
+    border-bottom: 2px solid #0f3460;
 }
 
-/* ── Mermaid container ─────────────────────────────────────────────────── */
-.mermaid-container svg {
-  max-width: 100%;
-  height: auto;
+.header h1 {
+    font-size: 3em;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #00d4ff, #7b68ee);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-.mermaid-container .node rect,
-.mermaid-container .node circle,
-.mermaid-container .node polygon {
-  fill: #1f2433 !important;
-  stroke: #6366f1 !important;
+.header p {
+    font-size: 1.1em;
+    color: #a0a0a0;
 }
 
-.mermaid-container .node text,
-.mermaid-container .label {
-  fill: #e2e8f0 !important;
-  font-family: 'Courier New', monospace !important;
+main {
+    display: grid;
+    gap: 30px;
+    margin-bottom: 40px;
 }
 
-.mermaid-container .edgePath .path {
-  stroke: #6366f1 !important;
+section {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid #0f3460;
+    border-radius: 8px;
+    padding: 25px;
+    backdrop-filter: blur(10px);
 }
 
-/* ── Goal progress bars ────────────────────────────────────────────────── */
-.goal-bar-track {
-  width: 100%;
-  height: 6px;
-  background: var(--border);
-  border-radius: 3px;
-  overflow: hidden;
-  margin-top: 4px;
+section h2 {
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    color: #00d4ff;
 }
 
-.goal-bar-fill {
-  height: 100%;
-  border-radius: 3px;
-  background: linear-gradient(90deg, var(--accent), var(--green));
-  transition: width 0.4s ease;
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-/* ── KPI card glow on hover ────────────────────────────────────────────── */
-.bg-omega-card {
-  transition: box-shadow 0.2s ease, border-color 0.2s ease;
-}
-.bg-omega-card:hover {
-  box-shadow: 0 0 0 1px var(--accent), 0 4px 24px rgba(99, 102, 241, 0.12);
+textarea {
+    width: 100%;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #0f3460;
+    border-radius: 6px;
+    color: #e0e0e0;
+    font-family: inherit;
+    font-size: 1em;
+    resize: vertical;
+    transition: border-color 0.3s;
 }
 
-/* ── Inputs focus glow ─────────────────────────────────────────────────── */
-input:focus, select:focus {
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+textarea:focus {
+    outline: none;
+    border-color: #00d4ff;
 }
 
-/* ── Pulse dot animation ───────────────────────────────────────────────── */
+.btn-primary {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #00d4ff, #7b68ee);
+    color: #1a1a2e;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 212, 255, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.status-box {
+    background: rgba(0, 0, 0, 0.5);
+    border-left: 4px solid #00d4ff;
+    border-radius: 4px;
+    padding: 15px;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+}
+
+.idle-text {
+    color: #808080;
+    font-style: italic;
+}
+
+.loading {
+    display: inline-block;
+    animation: pulse 1s infinite;
+}
+
 @keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.5; transform: scale(1.3); }
-}
-.animate-pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
 }
 
-/* ── Responsive tweaks ─────────────────────────────────────────────────── */
+.log-box {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    padding: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    line-height: 1.6;
+}
+
+.log-entry {
+    padding: 8px;
+    border-left: 3px solid #0f3460;
+    margin-bottom: 8px;
+    word-break: break-word;
+}
+
+.log-entry.iteration {
+    border-left-color: #00d4ff;
+    color: #00d4ff;
+}
+
+.log-entry.observation {
+    border-left-color: #7b68ee;
+    color: #a0a0a0;
+}
+
+.log-entry.error {
+    border-left-color: #ff6b6b;
+    color: #ff6b6b;
+}
+
+.log-entry.success {
+    border-left-color: #51cf66;
+    color: #51cf66;
+}
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid #0f3460;
+    color: #606060;
+    font-size: 0.85em;
+}
+
 @media (max-width: 768px) {
-  main { padding: 1rem; }
-  .grid-cols-3 { grid-template-columns: 1fr; }
+    .header h1 {
+        font-size: 2em;
+    }
+
+    section {
+        padding: 15px;
+    }
+
+    textarea {
+        font-size: 16px; /* Prevents zoom on mobile */
+    }
 }
