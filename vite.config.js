@@ -6,7 +6,7 @@ export default defineConfig({
     outDir: '../dist',
     emptyOutDir: true,
   },
-  server: {
+   server: {
     port: 3000,
     open: true,
     proxy: {
