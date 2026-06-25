@@ -1,0 +1,15 @@
+{
+  "name": "omega-financial-tracker",
+  "version": "1.0.0",
+  "description": "Omega AI Agent + Financial Tracker Platform",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.2.0"
+  },
+  "dependencies": {}
+}
