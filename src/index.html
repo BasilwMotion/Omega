@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OMEGA — Financial Tracker</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            omega: {
+              bg: '#0d0f14',
+              card: '#151820',
+              border: '#1f2433',
+              accent: '#6366f1',
+              green: '#22c55e',
+              red: '#ef4444',
+              yellow: '#f59e0b',
+              muted: '#94a3b8',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+
+  <!-- Mermaid.js -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
+
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body class="bg-omega-bg text-white min-h-screen font-mono">
+
+  <!-- ── Header ─────────────────────────────────────────────────────────── -->
+  <header class="border-b border-omega-border px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-3 h-3 rounded-full bg-omega-accent animate-pulse"></div>
+      <h1 class="text-xl font-bold tracking-widest text-omega-accent">OMEGA</h1>
+      <span class="text-omega-muted text-xs">Financial Intelligence Platform</span>
+    </div>
+    <div class="text-omega-muted text-xs" id="live-clock"></div>
+  </header>
+
+  <!-- ── Main grid ──────────────────────────────────────────────────────── -->
+  <main class="p-6 grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+    <!-- ── Left column ──────────────────────────────────────────────────── -->
+    <div class="xl:col-span-2 flex flex-col gap-6">
+
+      <!-- KPI strip -->
+      <div class="grid grid-cols-3 gap-4">
+        <div class="bg-omega-card border border-omega-border rounded-xl p-4">
+          <p class="text-omega-muted text-xs mb-1">Total Income</p>
+          <p class="text-2xl font-bold text-omega-green" id="kpi-gains">R 0.00</p>
+        </div>
+        <div class="bg-omega-card border border-omega-border rounded-xl p-4">
+          <p class="text-omega-muted text-xs mb-1">Total Expenses</p>
+          <p class="text-2xl font-bold text-omega-red" id="kpi-expenses">R 0.00</p>
+        </div>
+        <div class="bg-omega-card border border-omega-border rounded-xl p-4">
+          <p class="text-omega-muted text-xs mb-1">Net Position</p>
+          <p class="text-2xl font-bold" id="kpi-net">R 0.00</p>
+        </div>
+      </div>
+
+      <!-- Line chart: Timeline -->
+      <div class="bg-omega-card border border-omega-border rounded-xl p-5">
+        <h2 class="text-sm font-semibold text-omega-muted mb-4 tracking-widest uppercase">
+          Financial Timeline
+        </h2>
+        <canvas id="lineChart" height="120"></canvas>
+      </div>
+
+      <!-- Mermaid: Staff & Bridges -->
+      <div class="bg-omega-card border border-omega-border rounded-xl p-5">
+        <h2 class="text-sm font-semibold text-omega-muted mb-4 tracking-widest uppercase">
+          Team Structure &amp; Milestones
+        </h2>
+        <div id="mermaid-chart" class="mermaid-container overflow-x-auto">
+          <!-- injected by main.js -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── Right column ─────────────────────────────────────────────────── -->
+    <div class="flex flex-col gap-6">
+
+      <!-- Doughnut chart: Categories -->
+      <div class="bg-omega-card border border-omega-border rounded-xl p-5">
+        <h2 class="text-sm font-semibold text-omega-muted mb-4 tracking-widest uppercase">
+          Spending Breakdown
+        </h2>
+        <canvas id="doughnutChart" height="200"></canvas>
+        <div id="cat-legend" class="mt-3 flex flex-wrap gap-2 text-xs"></div>
+      </div>
+
+      <!-- Goal Setter -->
+      <div class="bg-omega-card border border-omega-border rounded-xl p-5">
+        <h2 class="text-sm font-semibold text-omega-muted mb-4 tracking-widest uppercase">
+          Goal Setter
+        </h2>
+        <div class="flex gap-2 mb-3">
+          <input id="goal-name" type="text" placeholder="Goal name"
+            class="flex-1 bg-omega-bg border border-omega-border rounded-lg px-3 py-2 text-xs text-white placeholder-omega-muted focus:outline-none focus:border-omega-accent" />
+          <input id="goal-target" type="number" placeholder="Target R"
+            class="w-28 bg-omega-bg border border-omega-border rounded-lg px-3 py-2 text-xs text-white placeholder-omega-muted focus:outline-none focus:border-omega-accent" />
+          <button onclick="addGoal()"
+            class="bg-omega-accent hover:bg-indigo-500 transition-colors text-white text-xs px-3 py-2 rounded-lg font-semibold">
+            + Add
+          </button>
+        </div>
+        <div id="goals-list" class="flex flex-col gap-2 max-h-48 overflow-y-auto"></div>
+      </div>
+
+      <!-- Transaction entry -->
+      <div class="bg-omega-card border border-omega-border rounded-xl p-5">
+        <h2 class="text-sm font-semibold text-omega-muted mb-4 tracking-widest uppercase">
+          Add Transaction
+        </h2>
+        <div class="flex flex-col gap-2">
+          <input id="tx-desc" type="text" placeholder="Description"
+            class="bg-omega-bg border border-omega-border rounded-lg px-3 py-2 text-xs text-white placeholder-omega-muted focus:outline-none focus:border-omega-accent" />
+          <div class="flex gap-2">
+            <input id="tx-amount" type="number" placeholder="Amount"
+              class="flex-1 bg-omega-bg border border-omega-border rounded-lg px-3 py-2 text-xs text-white placeholder-omega-muted focus:outline-none focus:border-omega-accent" />
+            <select id="tx-type"
+              class="bg-omega-bg border border-omega-border rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-omega-accent">
+              <option value="expense">Expense</option>
+              <option value="income">Income</option>
+            </select>
+          </div>
+          <input id="tx-category" type="text" placeholder="Category (e.g. Food, Rent)"
+            class="bg-omega-bg border border-omega-border rounded-lg px-3 py-2 text-xs text-white placeholder-omega-muted focus:outline-none focus:border-omega-accent" />
+          <button onclick="addTransaction()"
+            class="bg-omega-green hover:bg-green-400 transition-colors text-black text-xs px-3 py-2 rounded-lg font-bold">
+            Record Transaction
+          </button>
+        </div>
+      </div>
+
+      <!-- Staff entry -->
+      <div class="bg-omega-card border border-omega-border rounded-xl p-5">
+        <h2 class="text-sm font-semibold text-omega-muted mb-4 tracking-widest uppercase">
+          Add Team Member
+        </h2>
+        <div class="flex flex-col gap-2">
+          <input id="staff-name" type="text" placeholder="Name"
+            class="bg-omega-bg border border-omega-border rounded-lg px-3 py-2 text-xs text-white placeholder-omega-muted focus:outline-none focus:border-omega-accent" />
+          <input id="staff-role" type="text" placeholder="Role"
+            class="bg-omega-bg border border-omega-border rounded-lg px-3 py-2 text-xs text-white placeholder-omega-muted focus:outline-none focus:border-omega-accent" />
+          <div class="flex gap-2">
+            <input id="staff-assigned" type="number" placeholder="Tasks assigned"
+              class="flex-1 bg-omega-bg border border-omega-border rounded-lg px-3 py-2 text-xs text-white placeholder-omega-muted focus:outline-none focus:border-omega-accent" />
+            <input id="staff-done" type="number" placeholder="Completed"
+              class="flex-1 bg-omega-bg border border-omega-border rounded-lg px-3 py-2 text-xs text-white placeholder-omega-muted focus:outline-none focus:border-omega-accent" />
+          </div>
+          <button onclick="addStaff()"
+            class="bg-omega-yellow hover:bg-yellow-400 transition-colors text-black text-xs px-3 py-2 rounded-lg font-bold">
+            Add Member
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
